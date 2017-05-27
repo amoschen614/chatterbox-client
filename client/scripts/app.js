@@ -18,7 +18,17 @@ var app = {
       url: app.server,
       type: 'GET',
       success: function(data) {
-        console.log('ajax request succeeded');
+        console.dir(data);
+        // TODO:
+        // don't do anything if we have nothing to work with
+
+        // store messages for caching later
+
+        // only update the DOM if we have a new message
+          // render each individual message
+            // create a div to hold the message
+            // add in the message data
+            // add the message to the UI 
       },
       error: function(error) {
         console.error(error);
