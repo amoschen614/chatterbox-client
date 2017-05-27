@@ -13,6 +13,12 @@ var app = {
     app.$chats = $('#chats');
     app.$roomSelect = $('#roomSelect');
     app.$send = $('#send');
+    // fetch previous messages
+    app.fetch();
+    // poll for new messages every 3 seconds
+    setInterval(function() {
+      app.fetch();
+    }, 3000);
   },
 
   fetch: function() {
