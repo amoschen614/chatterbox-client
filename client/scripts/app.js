@@ -1,5 +1,5 @@
 var app = {
-  server: 'http://parse.sfm6.hackreactor.com/',
+  server: 'http://parse.sfm6.hackreactor.com/chatterbox/classes/messages',
   username: 'mackaby',
   roomname: 'lobby',
 
@@ -11,4 +11,19 @@ var app = {
     app.$chats = $('#chats');
     app.$roomSelect = $('#roomSelect');
     app.$send = $('#send');
+  },
+
+  fetch: function() {
+    $.ajax({
+      url: app.server,
+      type: 'GET',
+      success: function(data) {
+        console.log('ajax request succeeded');
+      },
+      error: function(error) {
+        console.error(error);
+      }
+    });
   }
+
+}
