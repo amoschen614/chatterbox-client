@@ -29,25 +29,34 @@ var app = {
         const mostRecentMessage = app.messages[app.messages.length-1];
         // only update the DOM if we have a new message
         if (mostRecentMessage.objectId !== app.lastMessageId) {
-          app.$chats.html(''); // erases existing HTML content
-          // render each individual message
-          for (let i = 0; i < app.messages.length; i++) {
-            // create a div to hold the message
-            let $chat = $('<div class="chat"/>')
-            // add in the message data
-            let $username = $('<span class="username">' + app.messages[i].text + '</span>');
-            $username.appendTo($chat);
-            let $message = $('<br><span>' + app.messages[i].text + '</span>');
-            $message.appendTo($chat);
-            // add the message to the UI
-            app.$chats.append($chat);
-          }
+          app.renderMessages(app.messages);
         }
       },
       error: function(error) {
         console.error(error);
       }
     });
+  },
+
+  renderMessages: function(messages) {
+    app.clearMessages(); // clear old messages
+    messages.forEach(app.renderMessage); // render each individual message
+  },
+
+  clearMessages: function() {
+    app.$chats.html(''); // erases existing inner HTML content 
+  },
+
+  renderMessage: function(message) {
+    // create a div to hold the message
+    let $chat = $('<div class="chat"/>')
+    // add in the message data
+    let $username = $('<span class="username">' + message.text + '</span>');
+    $username.appendTo($chat);
+    let $message = $('<br><span>' + message.text + '</span>');
+    $message.appendTo($chat);
+    // add the message to the UI
+    app.$chats.append($chat);
   }
 
 }
