@@ -15,6 +15,7 @@ var app = {
     app.$send = $('#send');
     // add listeners
     app.$send.on('submit', app.handleSubmit);
+    app.$roomSelect.on('change', app.handleRoomChange);
     // fetch previous messages
     app.fetch();
     // poll for new messages every 3 seconds
@@ -123,6 +124,10 @@ var app = {
     const $option = $('<option/>').val(roomname).text(roomname);
     // prevent cross-site scripting by escaping with DOM methods
     app.$roomSelect.append($option);
+  },
+
+  handleRoomChange: function(event) {
+    console.log('inside handleRoomChange');
   },
 
   escapeHTML: function(string) { // can substitute with jQuery .text method
