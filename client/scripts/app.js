@@ -35,7 +35,7 @@ var app = {
         if (!data.results || !data.results.length) { return; }
         // store messages for caching later
         app.messages = data.results;
-        const mostRecentMessage = app.messages[app.messages.length-1];
+        const mostRecentMessage = app.messages[app.messages.length - 1];
         // only update the DOM if we have a new message
         if (mostRecentMessage.objectId !== app.lastMessageId) {
           app.renderMessages(app.messages);
@@ -58,7 +58,7 @@ var app = {
 
   renderMessage: function(message) {
     // create a div to hold the message
-    let $chat = $('<div class="chat"/>')
+    let $chat = $('<div class="chat"/>');
     // add in the message data
     let $username = $('<span class="username">' + app.escapeHTML(message.text) + '</span>');
     $username.appendTo($chat);
@@ -68,14 +68,20 @@ var app = {
     app.$chats.append($chat);
   },
 
-  handleSubmit: function() {
+  handleSubmit: function(event) {
     // server expects JSON, so initialize content to stringify
     var message = {
-        username: app.username,
-        text: app.$message.val(),
-        roomname: app.roomname || 'lobby'
-      };
+      username: app.username,
+      text: app.$message.val(),
+      roomname: app.roomname || 'lobby'
+    };
     // send a message to the server
+    app.send(message);
+    event.preventDefault(); // default browser action refreshes page on events
+
+  },
+
+  send: function(message) {
     $.ajax({
       url: app.server,
       type: 'POST',
@@ -90,14 +96,12 @@ var app = {
         // show an error in the console if failed
         console.error('chatterbox: failed to send message', error);
       }
-    });
-    event.preventDefault(); // default browser action refreshes page on events
-
+    });  
   },
 
   escapeHTML: function(string) {
-    if (!string) { return; }
+    if (!string) { return; } 
     return string.replace(/[&<>"'=\/]/g, '');
   }
 
-}
+};
