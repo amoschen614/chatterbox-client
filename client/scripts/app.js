@@ -13,12 +13,14 @@ var app = {
     app.$chats = $('#chats');
     app.$roomSelect = $('#roomSelect');
     app.$send = $('#send');
+    // add listeners
+    app.$send.on('submit', app.handleSubmit);
     // fetch previous messages
     app.fetch();
     // poll for new messages every 3 seconds
-    setInterval(function() {
-      app.fetch();
-    }, 3000);
+    // setInterval(function() {
+    //   app.fetch();
+    // }, 3000);
   },
 
   fetch: function() {
@@ -63,6 +65,12 @@ var app = {
     $message.appendTo($chat);
     // add the message to the UI
     app.$chats.append($chat);
+  },
+
+  handleSubmit: function() {
+    console.log('handleSubmit called');
+    event.preventDefault(); // default browser action refreshes page on events
+    
   }
 
 }
