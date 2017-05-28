@@ -38,6 +38,7 @@ var app = {
         const mostRecentMessage = app.messages[app.messages.length - 1];
         // only update the DOM if we have a new message
         if (mostRecentMessage.objectId !== app.lastMessageId) {
+          app.renderRoomList(app.messages);
           app.renderMessages(app.messages);
         }
       },
@@ -70,7 +71,7 @@ var app = {
 
   handleSubmit: function(event) {
     // server expects JSON, so initialize content to stringify
-    var message = {
+    const message = {
       username: app.username,
       text: app.$message.val(),
       roomname: app.roomname || 'lobby'
@@ -99,7 +100,32 @@ var app = {
     });  
   },
 
-  escapeHTML: function(string) {
+  renderRoomList: function(messages) { // render rooms in response to message data
+    // provide option to create new room as first option in dropdown menu
+    app.$roomSelect.html('<option value="__newRoom">New room...</option></select>');
+    if (messages) {
+      let hasRoom = {};
+      // iterate through each message fetched and check roomname property
+      messages.forEach(function(message) {
+        const roomname = message.roomname;
+        // if message has roomname, add roomname as an option in room selection menu
+        if (roomname && !hasRoom[roomname]) {
+          app.renderRoom(roomname);
+          hasRoom[roomname] = true; // only add a roomname to menu once
+        }
+      });
+    }
+    app.$roomSelect.val(app.roomname); //show current room as selected in menu
+  },
+
+  renderRoom: function(roomname) {
+    // accept a roomname, create option element, and append to menu 
+    const $option = $('<option/>').val(roomname).text(roomname);
+    // prevent cross-site scripting by escaping with DOM methods
+    app.$roomSelect.append($option);
+  },
+
+  escapeHTML: function(string) { // can substitute with jQuery .text method
     if (!string) { return; } 
     return string.replace(/[&<>"'=\/]/g, '');
   }
