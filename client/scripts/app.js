@@ -60,9 +60,9 @@ var app = {
     // create a div to hold the message
     let $chat = $('<div class="chat"/>')
     // add in the message data
-    let $username = $('<span class="username">' + message.text + '</span>');
+    let $username = $('<span class="username">' + app.escapeHTML(message.text) + '</span>');
     $username.appendTo($chat);
-    let $message = $('<br><span>' + message.text + '</span>');
+    let $message = $('<br><span>' + app.escapeHTML(message.text) + '</span>');
     $message.appendTo($chat);
     // add the message to the UI
     app.$chats.append($chat);
@@ -93,6 +93,11 @@ var app = {
     });
     event.preventDefault(); // default browser action refreshes page on events
 
+  },
+
+  escapeHTML: function(string) {
+    if (!string) { return; }
+    return string.replace(/[&<>"'=\/]/g, '');
   }
 
 }
