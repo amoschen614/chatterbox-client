@@ -127,7 +127,20 @@ var app = {
   },
 
   handleRoomChange: function(event) {
-    console.log('inside handleRoomChange');
+    const selectIndex = app.$roomSelect.prop('selectIndex'); // built-in 
+    if (selectIndex === 0) { // first option -- create new room -- selected
+      // create a new room
+      const roomname = prompt('Enter room name');
+      if (roomname) {
+        app.roomname = roomname; // set current room to newly created room
+        app.renderRoom(roomname); // add name of new room to dropdown menu of rooms
+        app.$roomSelect.val(roomname); // set dropdown menu to display name of new room
+      } else {
+      // change to another existing room
+        app.roomname = app.$roomSelect.val();
+      }
+      app.renderMessages(app.messages);
+    }
   },
 
   escapeHTML: function(string) { // can substitute with jQuery .text method
