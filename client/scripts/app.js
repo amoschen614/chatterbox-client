@@ -27,6 +27,7 @@ var app = {
     $.ajax({
       url: app.server,
       type: 'GET',
+      data: { order: '-createdAt' },
       success: function(data) {
         console.dir(data);
         // TODO:
@@ -68,9 +69,30 @@ var app = {
   },
 
   handleSubmit: function() {
-    console.log('handleSubmit called');
+    // server expects JSON, so initialize content to stringify
+    var message = {
+        username: app.username,
+        text: app.$message.val(),
+        roomname: app.roomname || 'lobby'
+      };
+    // send a message to the server
+    $.ajax({
+      url: app.server,
+      type: 'POST',
+      data: JSON.stringify(message),
+      contentType: 'application/JSON',
+      success: function() {
+        app.$message.val(''); // feedback for message submission
+        // trigger a fetch to update the messages if successful
+        app.fetch();
+      },
+      error: function(error) {
+        // show an error in the console if failed
+        console.error('chatterbox: failed to send message', error);
+      }
+    });
     event.preventDefault(); // default browser action refreshes page on events
-    
+
   }
 
 }
