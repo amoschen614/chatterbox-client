@@ -76,7 +76,7 @@ var app = {
     let $username = $('<span class="username">/>');
     $username.text(message.username + ': ').appendTo($chat);
     let $message = $('<br><span/>');
-    $message.text(message).appendTo($chat);
+    $message.text(message.text).appendTo($chat);
     if (app.friends[message.username] === true) {
       $username.addClass('friend'); // add class to HTML element for CSS styling as friend
     }
