@@ -4,6 +4,7 @@ var app = {
   roomname: 'lobby',
   messages: [],
   lastMessageId: 0,
+  friends: {},
 
   init: function() {
     // get username
@@ -76,6 +77,9 @@ var app = {
     $username.text(message.username + ': ').appendTo($chat);
     let $message = $('<br><span/>');
     $message.text(message).appendTo($chat);
+    if (app.friends[message.username] === true) {
+      $username.addClass('friend'); // add class to HTML element for CSS styling as friend
+    }
     // add the message to the UI
     app.$chats.append($chat);
   },
@@ -154,8 +158,19 @@ var app = {
   },
 
   handleUsernameClick: function(event) {
-    console.log('inside handleUsernameClick');
-  },
+    // console.log('inside handleUsernameClick');
+    // console.dir(event);
+    const username = event.target.innerText; // finds the DOM element that generated event
+    const slicedName = username.slice(0, -2); // remove trailing ': '  characters 
+    if (username !== undefined) {
+      app.friends[slicedName] = !app.friends[slicedName]; // toggle friendship
+      $('.username').each(function() {
+      if (this.innerText === username) {
+        $(this).toggleClass('friend');
+      }
+    });
+    }
+  },  
 
   escapeHTML: function(string) { // can substitute with jQuery .text method
     if (!string) { return; } 
