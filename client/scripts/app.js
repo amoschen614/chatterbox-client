@@ -51,7 +51,13 @@ var app = {
 
   renderMessages: function(messages) {
     app.clearMessages(); // clear old messages
-    messages.forEach(app.renderMessage); // render each individual message
+    messages.filter(function(message) {
+      if (app.roomname === 'lobby' && !message.roomname) {
+        return true; // okay to display any message without specified room in lobby
+      } else if (message.roomname === app.roomname) {
+        return true; // okay to display message if current room is room specified by message
+      } else return false;
+    }).forEach(app.renderMessage); // render each individual message
   },
 
   clearMessages: function() {
@@ -127,7 +133,7 @@ var app = {
   },
 
   handleRoomChange: function(event) {
-    const selectIndex = app.$roomSelect.prop('selectIndex'); // built-in 
+    const selectIndex = app.$roomSelect.prop('selectedIndex'); // built-in 
     if (selectIndex === 0) { // first option -- create new room -- selected
       // create a new room
       const roomname = prompt('Enter room name');
@@ -135,12 +141,12 @@ var app = {
         app.roomname = roomname; // set current room to newly created room
         app.renderRoom(roomname); // add name of new room to dropdown menu of rooms
         app.$roomSelect.val(roomname); // set dropdown menu to display name of new room
-      } else {
+      } 
+    } else {
       // change to another existing room
-        app.roomname = app.$roomSelect.val();
-      }
-      app.renderMessages(app.messages);
+      app.roomname = app.$roomSelect.val();
     }
+    app.renderMessages(app.messages);
   },
 
   escapeHTML: function(string) { // can substitute with jQuery .text method
