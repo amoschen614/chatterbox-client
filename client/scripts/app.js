@@ -16,6 +16,10 @@ var app = {
     // add listeners
     app.$send.on('submit', app.handleSubmit);
     app.$roomSelect.on('change', app.handleRoomChange);
+    // even though no elements of class 'username' exist upon init
+    // can rely on propagation to catch and handle events triggered 
+    // by the child nodes that will eventually be created 
+    app.$chats.on('click', '.username', app.handleUsernameClick);
     // fetch previous messages
     app.fetch();
     // poll for new messages every 3 seconds
@@ -147,6 +151,10 @@ var app = {
       app.roomname = app.$roomSelect.val();
     }
     app.renderMessages(app.messages);
+  },
+
+  handleUsernameClick: function(event) {
+    console.log('inside handleUsernameClick');
   },
 
   escapeHTML: function(string) { // can substitute with jQuery .text method
