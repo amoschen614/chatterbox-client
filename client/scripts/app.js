@@ -22,11 +22,12 @@ var app = {
     // by the child nodes that will eventually be created 
     app.$chats.on('click', '.username', app.handleUsernameClick);
     // fetch previous messages
+    app.startSpinner();
     app.fetch();
     // poll for new messages every 3 seconds
-    // setInterval(function() {
-    //   app.fetch();
-    // }, 3000);
+    setInterval(function() {
+      app.fetch();
+    }, 3000);
   },
 
   fetch: function() {
@@ -63,6 +64,7 @@ var app = {
         return true; // okay to display message if current room is room specified by message
       } else return false;
     }).forEach(app.renderMessage); // render each individual message
+    app.stopSpinner();
   },
 
   clearMessages: function() {
@@ -101,6 +103,7 @@ var app = {
   },
 
   send: function(message) {
+    app.startSpinner();
     $.ajax({
       url: app.server,
       type: 'POST',
@@ -179,7 +182,17 @@ var app = {
     //   }
     // });
     // }
-  },  
+  },
+
+  startSpinner: function() {
+    $('.spinner img').show();
+    $('form input[type=submit]').attr('disabled', true);
+  },
+
+  stopSpinner: function() {
+    $('.spinner img').fadeOut('fast');
+    $('form input[type="submit"]').attr('disabled', null);
+  },
 
   escapeHTML: function(string) { // can substitute with jQuery .text method
     if (!string) { return; } 
