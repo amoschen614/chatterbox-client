@@ -74,12 +74,15 @@ var app = {
     let $chat = $('<div class="chat"/>');
     // add in the message data
     let $username = $('<span class="username">/>');
-    $username.text(message.username + ': ').appendTo($chat);
-    let $message = $('<br><span/>');
-    $message.text(message.text).appendTo($chat);
+    $username
+      .text(message.username + ': ')
+      .attr('data-username', message.username)
+      .appendTo($chat);
     if (app.friends[message.username] === true) {
       $username.addClass('friend'); // add class to HTML element for CSS styling as friend
     }
+    let $message = $('<br><span/>');
+    $message.text(message.text).appendTo($chat);
     // add the message to the UI
     app.$chats.append($chat);
   },
@@ -158,18 +161,24 @@ var app = {
   },
 
   handleUsernameClick: function(event) {
+    const username = $(event.target).data('username');
+    if (username !== undefined) {
+      app.friends[username] = !app.friends[username];
+    }
+    const selector = '[data-username="' + username.replace(/"/g, '\\\"' + '"]');
+    const $usernames = $(selector).toggleClass('friend');
     // console.log('inside handleUsernameClick');
     // console.dir(event);
-    const username = event.target.innerText; // finds the DOM element that generated event
-    const slicedName = username.slice(0, -2); // remove trailing ': '  characters 
-    if (username !== undefined) {
-      app.friends[slicedName] = !app.friends[slicedName]; // toggle friendship
-      $('.username').each(function() {
-      if (this.innerText === username) {
-        $(this).toggleClass('friend');
-      }
-    });
-    }
+    // const username = event.target.innerText; // finds the DOM element that generated event
+    // const slicedName = username.slice(0, -2); // remove trailing ': '  characters 
+    // if (username !== undefined) {
+    //   app.friends[slicedName] = !app.friends[slicedName]; // toggle friendship
+    //   $('.username').each(function() {
+    //   if (this.innerText === username) {
+    //     $(this).toggleClass('friend');
+    //   }
+    // });
+    // }
   },  
 
   escapeHTML: function(string) { // can substitute with jQuery .text method
